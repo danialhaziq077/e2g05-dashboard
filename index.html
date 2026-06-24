@@ -291,9 +291,8 @@
             gap: 15px;
             transition: all 0.3s ease;
             box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-
-	position: relative; 
-        z-index: 10;
+            position: relative; 
+            z-index: 10;
         }
 
         .pump-btn i { font-size: 3rem; color: var(--text-muted); transition: color 0.3s; }
@@ -396,7 +395,7 @@
             <div class="map-container">
                 <div id="map"></div>
                 <div class="gps-overlay-data" id="gps-coords">
-                    Awaiting satellite lock...
+                    LAT: <span style="color:var(--neon-blue)">1.559396</span><br>LNG: <span style="color:var(--neon-blue)">103.642999</span><br><span style="color:var(--neon-green); font-size:0.8em;">STATIC OVERRIDE ENGAGED</span>
                 </div>
             </div>
         </section>
@@ -454,11 +453,11 @@
         };
 
         // 3. INITIALIZE LEAFLET MAP
-        // Default coordinates (e.g., UTM Johor Bahru area as a placeholder)
-        const defaultLat = 1.558; 
-        const defaultLng = 103.638;
+        // Hardcoded static coordinates for indoor testing override
+        const defaultLat = 1.559396;  
+        const defaultLng = 103.642999;
         
-        const map = L.map('map').setView([defaultLat, defaultLng], 15);
+        const map = L.map('map').setView([defaultLat, defaultLng], 17);
         
         // Add futuristic dark map tiles (CartoDB Dark Matter)
         L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
@@ -468,7 +467,7 @@
 
         // Add a marker
         let hardwareMarker = L.marker([defaultLat, defaultLng]).addTo(map);
-        hardwareMarker.bindPopup("<b>AgriPulse E2G05</b><br>Last known location.").openPopup();
+        hardwareMarker.bindPopup("<b>AgriPulse E2G05</b><br>Static Location Override.").openPopup();
 
 
         // 4. FIREBASE SENSOR READINGS
@@ -487,7 +486,12 @@
                 if(data.humidity !== undefined) humDisplay.innerHTML = `${data.humidity}<span class="unit">%</span>`;
                 if(data.soilMoisture !== undefined) soilDisplay.innerHTML = `${data.soilMoisture}<span class="unit">%</span>`;
                 
-                // Update Map if GPS data exists and is valid
+                // ==============================================================
+                // GPS FIREBASE OVERRIDE ENGAGED:
+                // The block below is commented out to force the map to stay 
+                // locked on the static hardcoded location above.
+                // ==============================================================
+                /*
                 if (data.latitude && data.longitude && data.latitude !== 0) {
                     const lat = parseFloat(data.latitude);
                     const lng = parseFloat(data.longitude);
@@ -499,6 +503,7 @@
                     // Update overlay text
                     gpsCoords.innerHTML = `LAT: <span style="color:var(--neon-blue)">${lat.toFixed(6)}</span><br>LNG: <span style="color:var(--neon-blue)">${lng.toFixed(6)}</span>`;
                 }
+                */
             }
         });
 
